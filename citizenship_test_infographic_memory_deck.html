@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Australian Citizenship Test - Visual Memory Infographic</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ausgreen: '#00843D',
+            ausgold: '#FFCD00',
+            ausdeepblue: '#002B7F',
+            ausred: '#E4002B',
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    /* Hide scrollbar for tab navigation */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    /* Memory masked mode blur */
+    .memory-masked .memo-answer {
+      filter: blur(5px);
+      user-select: none;
+      transition: filter 0.2s ease, background-color 0.2s ease;
+      cursor: pointer;
+      background-color: #fef08a;
+      color: transparent;
+      border-radius: 4px;
+      padding: 0 4px;
+    }
+    .memory-masked .memo-answer:hover,
+    .memory-masked .memo-answer.revealed {
+      filter: blur(0);
+      color: inherit;
+      background-color: #bbf7d0;
+    }
+    @media print {
+      .no-print { display: none !important; }
+      body { background: white !important; color: black !important; }
+      .print-break { page-break-after: always; }
+    }
+  </style>
+</head>
+<body class="bg-white text-slate-800 min-h-screen antialiased selection:bg-amber-200 selection:text-slate-900">
+
+  <header class="sticky top-0 z-50 backdrop-blur-md bg-white/95 border-b border-slate-200 px-4 py-3 shadow-sm">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-amber-400 flex items-center justify-center font-black text-white shadow-md text-lg">
+          AU
+        </div>
+        <div>
+          <h1 class="text-lg md:text-xl font-extrabold tracking-tight text-slate-900 flex items-center gap-2">
+            Citizenship Test Visual Cheat Sheet
+            <span class="text-xs bg-emerald-50 text-emerald-700 font-semibold px-2 py-0.5 rounded-full border border-emerald-200">Official Book Facts</span>
+          </h1>
+          <p class="text-xs text-slate-500 hidden sm:block">High-yield memorization matrix: symbols, numbers, institutions & test traps</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 no-print">
+        <!-- Masking Toggle Button -->
+        <button id="maskToggleBtn" onclick="toggleMaskMode()" class="flex items-center gap-2 text-xs font-semibold px-3 py-2 rounded-lg bg-amber-50 text-amber-800 border border-amber-300 hover:bg-amber-100 transition-all shadow-sm">
+          <i data-lucide="eye-off" class="w-4 h-4 text-amber-600"></i>
+          <span id="maskBtnText">Memory Mask: OFF</span>
+        </button>
+
+        <!-- View Switcher -->
+        <div class="flex bg-slate-100 p-1 rounded-lg border border-slate-200">
+          <button onclick="switchTab('infographic')" id="tabBtn-infographic" class="px-3 py-1 text-xs font-medium rounded-md bg-emerald-600 text-white shadow-sm">Infographic</button>
+          <button onclick="switchTab('flashcards')" id="tabBtn-flashcards" class="px-3 py-1 text-xs font-medium rounded-md text-slate-600 hover:text-slate-900">Flashcards</button>
+          <button onclick="switchTab('quiz')" id="tabBtn-quiz" class="px-3 py-1 text-xs font-medium rounded-md text-slate-600 hover:text-slate-900">Quick 10 Quiz</button>
+        </div>
+
+        <button onclick="window.print()" class="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition" title="Print Cheatsheet">
+          <i data-lucide="printer" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 py-6 bg-white">
+    
+    <!-- Test Rule Alert -->
+    <div class="mb-6 p-4 rounded-2xl bg-amber-50/70 border border-amber-200 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-sm">
+      <div class="flex items-center gap-3">
+        <div class="p-2.5 rounded-xl bg-amber-100 text-amber-700 shrink-0 border border-amber-200">
+          <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <h2 class="text-sm font-bold text-amber-900 uppercase tracking-wide">Test Passing Formula (Crucial)</h2>
+          <p class="text-xs text-slate-700 mt-0.5">
+            The exam has <span class="font-bold text-slate-900">20 questions</span>. You need <span class="font-bold text-slate-900">75% (15/20)</span> to pass, <span class="text-amber-800 font-extrabold underline decoration-amber-500">AND you must get ALL 5 Australian Values questions 100% correct</span> or you fail automatically.
+          </p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 self-end md:self-center shrink-0">
+        <span class="text-xs px-2.5 py-1 rounded-md bg-white border border-slate-200 text-slate-600 font-mono font-medium shadow-2xs">20 Qs total</span>
+        <span class="text-xs px-2.5 py-1 rounded-md bg-emerald-100/80 border border-emerald-300 text-emerald-800 font-bold font-mono">5/5 Values required</span>
+      </div>
+    </div>
+
+    <!-- MAIN INFOGRAPHIC TAB CONTENT -->
+    <div id="view-infographic" class="space-y-8">
+
+      <section>
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-6 rounded-full bg-amber-500"></span>
+            <h2 class="text-xl font-bold tracking-tight text-slate-900">1. Crucial Numbers You Cannot Guess</h2>
+          </div>
+          <span class="text-xs text-slate-500">Tap highlighted items in Mask Mode to reveal</span>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          <!-- Stat 1 -->
+          <div class="bg-white border border-slate-200 rounded-xl p-3.5 hover:border-amber-300 hover:shadow-sm transition">
+            <span class="text-[10px] font-bold text-slate-500 uppercase block tracking-wider">Commonwealth Star</span>
+            <div class="text-2xl font-black text-amber-600 my-1 memo-answer">7 points</div>
+            <p class="text-[11px] text-slate-600">6 for states + 1 for all territories combined</p>
+          </div>
+          <!-- Stat 2 -->
+          <div class="bg-white border border-slate-200 rounded-xl p-3.5 hover:border-emerald-300 hover:shadow-sm transition">
+            <span class="text-[10px] font-bold text-slate-500 uppercase block tracking-wider">Total Senators</span>
+            <div class="text-2xl font-black text-emerald-600 my-1 memo-answer">76 total</div>
+            <p class="text-[11px] text-slate-600"><span class="memo-answer">12</span> per State (x6) + <span class="memo-answer">2</span> per Territory (x2)</p>
+          </div>
+          <!-- Stat 3 -->
+          <div class="bg-white border border-slate-200 rounded-xl p-3.5 hover:border-cyan-300 hover:shadow-sm transition">
+            <span class="text-[10px] font-bold text-slate-500 uppercase block tracking-wider">House of Reps</span>
+            <div class="text-2xl font-black text-cyan-600 my-1 memo-answer">150+ MPs</div>
+            <p class="text-[11px] text-slate-600">Electorate seats chosen by population</p>
+          </div>
+          <!-- Stat 4 -->
+          <div class="bg-white border border-slate-200 rounded-xl p-3.5 hover:border-purple-300 hover:shadow-sm transition">
+            <span class="text-[10px] font-bold text-slate-500 uppercase block tracking-wider">Double Majority</span>
+            <div class="text-2xl font-black text-purple-600 my-1 memo-answer">50% + 4/6</div>
+            <p class="text-[11px] text-slate-600">National majority of voters + 4 of the 6 states</p>
+          </div>
+          <!-- Stat 5 -->
+          <div class="bg-white border border-slate-200 rounded-xl p-3.5 hover:border-rose-300 hover:shadow-sm transition">
+            <span class="text-[10px] font-bold text-slate-500 uppercase block tracking-wider">Federation Year</span>
+            <div class="text-2xl font-black text-rose-600 my-1 memo-answer">1 Jan 1901</div>
+            <p class="text-[11px] text-slate-600">Colonies united into Commonwealth</p>
+          </div>
+          <!-- Stat 6 -->
+          <div class="bg-white border border-slate-200 rounded-xl p-3.5 hover:border-blue-300 hover:shadow-sm transition">
+            <span class="text-[10px] font-bold text-slate-500 uppercase block tracking-wider">1967 Referendum</span>
+            <div class="text-2xl font-black text-blue-600 my-1 memo-answer">&gt;90% Yes</div>
+            <p class="text-[11px] text-slate-600">Indigenous people counted in Census</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="flex items-center gap-2 mb-4">
+          <span class="w-2.5 h-6 rounded-full bg-emerald-500"></span>
+          <h2 class="text-xl font-bold tracking-tight text-slate-900">2. Official Flags & Emblems (Colors & Symbolism)</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          
+          <!-- Australian National Flag -->
+          <div class="bg-white border border-slate-200 rounded-2xl p-5 relative overflow-hidden flex flex-col justify-between shadow-xs hover:shadow-md transition">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <h3 class="font-bold text-base text-blue-900">Australian National Flag</h3>
+                <span class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded border border-blue-200 font-semibold">Blue Ensign</span>
+              </div>
+              
+              <!-- Flag diagram SVG -->
+              <div class="w-full h-32 bg-[#00008b] rounded-lg relative overflow-hidden border border-slate-300 shadow-inner flex items-center justify-center">
+                <!-- Union Jack mini -->
+                <div class="absolute top-0 left-0 w-24 h-16 bg-[#012169] border-r border-b border-white/30">
+                  <div class="relative w-full h-full flex items-center justify-center">
+                    <span class="text-[10px] font-mono font-bold text-white">Union Jack</span>
+                  </div>
+                </div>
+                <!-- Commonwealth Star -->
+                <div class="absolute bottom-2 left-8 text-amber-300 flex flex-col items-center">
+                  <i data-lucide="sparkles" class="w-6 h-6"></i>
+                  <span class="text-[9px] font-bold text-white">7-Point Star</span>
+                </div>
+                <!-- Southern Cross -->
+                <div class="absolute right-6 text-white flex flex-col items-center text-xs">
+                  <div class="grid grid-cols-2 gap-1 text-[10px] text-white">
+                    <span>✨</span><span>✨</span>
+                    <span>✨</span><span>✨</span>
+                  </div>
+                  <span class="text-[9px] text-slate-100 mt-1 font-semibold">Southern Cross</span>
+                </div>
+              </div>
+
+              <ul class="text-xs space-y-1.5 text-slate-700 pt-2">
+                <li>• <strong class="text-slate-900">Union Jack:</strong> Represents <span class="memo-answer">British settlement history & institutions</span></li>
+                <li>• <strong class="text-slate-900">Commonwealth Star:</strong> <span class="memo-answer">7 points (6 states + 1 territories)</span></li>
+                <li>• <strong class="text-slate-900">Southern Cross:</strong> Stars visible in the <span class="memo-answer">southern hemisphere sky</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Aboriginal Flag -->
+          <div class="bg-white border border-slate-200 rounded-2xl p-5 relative overflow-hidden flex flex-col justify-between shadow-xs hover:shadow-md transition">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <h3 class="font-bold text-base text-amber-900">Australian Aboriginal Flag</h3>
+                <span class="text-xs bg-amber-50 text-amber-700 px-2 py-0.5 rounded border border-amber-200 font-semibold">1971</span>
+              </div>
+
+              <!-- Flag diagram SVG -->
+              <div class="w-full h-32 rounded-lg overflow-hidden border border-slate-300 shadow-inner flex flex-col relative">
+                <div class="h-1/2 bg-black flex items-center justify-center text-[11px] font-bold text-slate-200 tracking-wider">
+                  TOP: BLACK (The People)
+                </div>
+                <div class="h-1/2 bg-[#d71920] flex items-center justify-center text-[11px] font-bold text-white tracking-wider">
+                  BOTTOM: RED (The Earth)
+                </div>
+                <!-- Center Sun -->
+                <div class="absolute inset-0 m-auto w-12 h-12 rounded-full bg-[#ffcc00] flex items-center justify-center shadow-lg border border-black/20">
+                  <span class="text-[8px] font-extrabold text-black uppercase">Sun</span>
+                </div>
+              </div>
+
+              <ul class="text-xs space-y-1.5 text-slate-700 pt-2">
+                <li>• <strong class="text-slate-900">Top Black:</strong> Represents the <span class="memo-answer">Aboriginal peoples of Australia</span></li>
+                <li>• <strong class="text-slate-900">Bottom Red:</strong> Represents the <span class="memo-answer">earth (ceremonial relationship)</span></li>
+                <li>• <strong class="text-slate-900">Yellow Circle:</strong> Represents the <span class="memo-answer">sun (giver of life & protector)</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Torres Strait Islander Flag -->
+          <div class="bg-white border border-slate-200 rounded-2xl p-5 relative overflow-hidden flex flex-col justify-between shadow-xs hover:shadow-md transition">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <h3 class="font-bold text-base text-emerald-900">Torres Strait Islander Flag</h3>
+                <span class="text-xs bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded border border-emerald-200 font-semibold">1992</span>
+              </div>
+
+              <!-- Flag diagram SVG -->
+              <div class="w-full h-32 rounded-lg overflow-hidden border border-slate-300 shadow-inner flex flex-col relative bg-[#00008b]">
+                <div class="h-1/5 bg-[#009933]"></div>
+                <div class="h-1 bg-black"></div>
+                <div class="flex-1 bg-[#00008b] flex items-center justify-center">
+                  <div class="flex flex-col items-center">
+                    <span class="text-[10px] font-bold text-white">White Dhari</span>
+                    <span class="text-xs text-white font-bold">⭐ (5-pt)</span>
+                  </div>
+                </div>
+                <div class="h-1 bg-black"></div>
+                <div class="h-1/5 bg-[#009933]"></div>
+              </div>
+
+              <ul class="text-xs space-y-1.5 text-slate-700 pt-2">
+                <li>• <strong class="text-slate-900">Green stripes:</strong> Represent the <span class="memo-answer">land</span></li>
+                <li>• <strong class="text-slate-900">Blue panel:</strong> Represents the <span class="memo-answer">sea</span>; <strong class="text-slate-900">Black lines:</strong> <span class="memo-answer">people</span></li>
+                <li>• <strong class="text-slate-900">White Dhari (Headdress):</strong> Symbol for <span class="memo-answer">all Torres Strait Islanders</span></li>
+                <li>• <strong class="text-slate-900">5-pointed Star:</strong> Represents <span class="memo-answer">island groups & peace (white)</span></li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Quick Badges of National Emblems -->
+        <div class="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div class="bg-white border border-slate-200 p-3 rounded-xl flex items-center gap-3 shadow-2xs">
+            <div class="w-10 h-10 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-lg">🌿</div>
+            <div>
+              <p class="text-[10px] text-slate-500 uppercase font-semibold">National Flower</p>
+              <p class="text-sm font-bold text-slate-900 memo-answer">Golden Wattle</p>
+            </div>
+          </div>
+          <div class="bg-white border border-slate-200 p-3 rounded-xl flex items-center gap-3 shadow-2xs">
+            <div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-lg">🦘</div>
+            <div>
+              <p class="text-[10px] text-slate-500 uppercase font-semibold">Coat of Arms Supporters</p>
+              <p class="text-sm font-bold text-slate-900 memo-answer">Red Kangaroo & Emu</p>
+            </div>
+          </div>
+          <div class="bg-white border border-slate-200 p-3 rounded-xl flex items-center gap-3 shadow-2xs">
+            <div class="w-10 h-10 rounded-lg bg-cyan-100 text-cyan-700 flex items-center justify-center font-bold text-lg">💎</div>
+            <div>
+              <p class="text-[10px] text-slate-500 uppercase font-semibold">National Gemstone</p>
+              <p class="text-sm font-bold text-slate-900 memo-answer">Opal</p>
+            </div>
+          </div>
+          <div class="bg-white border border-slate-200 p-3 rounded-xl flex items-center gap-3 shadow-2xs">
+            <div class="w-10 h-10 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-lg">🎨</div>
+            <div>
+              <p class="text-[10px] text-slate-500 uppercase font-semibold">National Colours</p>
+              <p class="text-sm font-bold text-slate-900 memo-answer">Green and Gold</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="flex items-center gap-2 mb-4">
+          <span class="w-2.5 h-6 rounded-full bg-cyan-500"></span>
+          <h2 class="text-xl font-bold tracking-tight text-slate-900">3. "Trap" Pairs: Don't Confuse These!</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          
+          <!-- Trap 1: Welcome vs Acknowledgement -->
+          <div class="bg-white border border-slate-200 rounded-2xl p-5 space-y-3 shadow-xs hover:shadow-md transition">
+            <div class="flex items-center gap-2 text-rose-600 font-bold text-sm pb-1 border-b border-slate-100">
+              <i data-lucide="split" class="w-4 h-4"></i>
+              Indigenous Ceremonies Protocol
+            </div>
+            
+            <div class="space-y-3 text-xs">
+              <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                <span class="text-amber-700 font-bold block text-sm mb-1">Welcome to Country</span>
+                <p class="text-slate-700">
+                  <span class="text-rose-600 font-bold">ONLY</span> performed by an <span class="memo-answer font-bold text-slate-900">Aboriginal or Torres Strait Islander Traditional Custodian</span> of the local land. Done first to open events.
+                </p>
+              </div>
+
+              <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                <span class="text-cyan-700 font-bold block text-sm mb-1">Acknowledgement of Country</span>
+                <p class="text-slate-700">
+                  Can be given by <span class="memo-answer font-bold text-slate-900">ANYONE</span> (e.g. Master of Ceremonies, meeting chair) to pay respect to Traditional Custodians & Elders past and present.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Trap 2: Head of State vs Head of Government -->
+          <div class="bg-white border border-slate-200 rounded-2xl p-5 space-y-3 shadow-xs hover:shadow-md transition">
+            <div class="flex items-center gap-2 text-rose-600 font-bold text-sm pb-1 border-b border-slate-100">
+              <i data-lucide="crown" class="w-4 h-4"></i>
+              Who Leads What?
+            </div>
+
+            <div class="space-y-3 text-xs">
+              <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                <span class="text-amber-700 font-bold block text-sm mb-1">Head of State</span>
+                <p class="text-slate-700">
+                  <span class="memo-answer font-bold text-slate-900">The King of Australia (King Charles III)</span>, represented inside Australia by the <span class="memo-answer font-bold text-slate-900">Governor-General</span>. Remains politically neutral.
+                </p>
+              </div>
+
+              <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                <span class="text-emerald-700 font-bold block text-sm mb-1">Head of Government</span>
+                <p class="text-slate-700">
+                  <span class="memo-answer font-bold text-slate-900">The Prime Minister</span> (leader of the majority party or coalition in the House of Representatives).
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Trap 3: Passing Laws & Royal Assent -->
+          <div class="bg-white border border-slate-200 rounded-2xl p-5 space-y-3 shadow-xs hover:shadow-md transition">
+            <div class="flex items-center gap-2 text-rose-600 font-bold text-sm pb-1 border-b border-slate-100">
+              <i data-lucide="feather" class="w-4 h-4"></i>
+              How Bills Become Laws
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-2">
+              <div class="flex items-center gap-2">
+                <span class="w-5 h-5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center font-bold text-[10px]">1</span>
+                <span>Proposed law introduced = <span class="font-bold text-slate-900">"Bill"</span></span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-5 h-5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center font-bold text-[10px]">2</span>
+                <span>Debated & voted by <span class="font-bold text-slate-900">both House & Senate</span></span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-5 h-5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center font-bold text-[10px]">3</span>
+                <span>Signed by <span class="memo-answer font-bold text-amber-700">Governor-General</span> = called <span class="memo-answer font-bold text-emerald-700">Royal Assent</span></span>
+              </div>
+              <div class="mt-2 text-[11px] text-slate-600 bg-amber-50 p-2 rounded-lg border border-amber-200">
+                ⚡ <strong class="text-amber-900">Dual Citizen rule:</strong> Dual citizens <span class="text-rose-600 font-bold">CANNOT</span> run for federal parliament!
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <section>
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-6 rounded-full bg-purple-500"></span>
+            <h2 class="text-xl font-bold tracking-tight text-slate-900">4. The 3 Levels of Government (Who Does What?)</h2>
+          </div>
+          <span class="text-xs text-slate-500 font-mono">Tested frequently in scenarios</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          
+          <!-- Level 1: Federal -->
+          <div class="bg-white border border-slate-200 rounded-2xl p-5 flex flex-col justify-between shadow-xs hover:shadow-md transition">
+            <div>
+              <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
+                <div class="flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center font-bold">1</div>
+                  <h3 class="font-bold text-sm text-slate-900">Federal (National)</h3>
+                </div>
+                <span class="text-[10px] text-slate-500">Canberra</span>
+              </div>
+              <p class="text-[11px] text-slate-600 mb-3">Leader: <strong class="text-slate-900">Prime Minister</strong></p>
+              
+              <ul class="space-y-1.5 text-slate-700">
+                <li class="flex items-center gap-2"><i data-lucide="shield" class="w-3.5 h-3.5 text-blue-600"></i> Defence & National Security</li>
+                <li class="flex items-center gap-2"><i data-lucide="plane" class="w-3.5 h-3.5 text-blue-600"></i> Immigration & Citizenship</li>
+                <li class="flex items-center gap-2"><i data-lucide="globe" class="w-3.5 h-3.5 text-blue-600"></i> Foreign Affairs & Trade</li>
+                <li class="flex items-center gap-2"><i data-lucide="dollar-sign" class="w-3.5 h-3.5 text-blue-600"></i> Taxation (ATO) & Currency</li>
+                <li class="flex items-center gap-2"><i data-lucide="mail" class="w-3.5 h-3.5 text-blue-600"></i> Postal services & Communications</li>
+                <li class="flex items-center gap-2"><i data-lucide="heart-pulse" class="w-3.5 h-3.5 text-blue-600"></i> Social Security (Services Australia)</li>
+              </ul>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 text-[10px] text-blue-700 font-mono font-medium">
+              Memory hook: Whole-country border & money matters
+            </div>
+          </div>
+
+          <!-- Level 2: State / Territory -->
+          <div class="bg-white border border-slate-200 rounded-2xl p-5 flex flex-col justify-between shadow-xs hover:shadow-md transition">
+            <div>
+              <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
+                <div class="flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">2</div>
+                  <h3 class="font-bold text-sm text-slate-900">State & Territory</h3>
+                </div>
+                <span class="text-[10px] text-slate-500">6 States + 2 Territories</span>
+              </div>
+              <p class="text-[11px] text-slate-600 mb-3">Leader: <strong class="text-slate-900">Premier</strong> (States) / <strong class="text-slate-900">Chief Minister</strong> (Territories)</p>
+
+              <ul class="space-y-1.5 text-slate-700">
+                <li class="flex items-center gap-2"><i data-lucide="building-2" class="w-3.5 h-3.5 text-emerald-600"></i> Hospitals & Health services</li>
+                <li class="flex items-center gap-2"><i data-lucide="graduation-cap" class="w-3.5 h-3.5 text-emerald-600"></i> Schools & Education</li>
+                <li class="flex items-center gap-2"><i data-lucide="siren" class="w-3.5 h-3.5 text-emerald-600"></i> Police & Ambulance services</li>
+                <li class="flex items-center gap-2"><i data-lucide="train" class="w-3.5 h-3.5 text-emerald-600"></i> Public transport & Major railways</li>
+                <li class="flex items-center gap-2"><i data-lucide="car" class="w-3.5 h-3.5 text-emerald-600"></i> Major roads & Driver Licensing</li>
+                <li class="flex items-center gap-2"><i data-lucide="trees" class="w-3.5 h-3.5 text-emerald-600"></i> Forestry & Mining regulation</li>
+              </ul>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 text-[10px] text-emerald-700 font-mono font-medium">
+              Memory hook: Essential human infrastructure & emergencies
+            </div>
+          </div>
+
+          <!-- Level 3: Local -->
+          <div class="bg-white border border-slate-200 rounded-2xl p-5 flex flex-col justify-between shadow-xs hover:shadow-md transition">
+            <div>
+              <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
+                <div class="flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center font-bold">3</div>
+                  <h3 class="font-bold text-sm text-slate-900">Local Councils</h3>
+                </div>
+                <span class="text-[10px] text-slate-500">Shires, Municipalities</span>
+              </div>
+              <p class="text-[11px] text-slate-600 mb-3">Leader: <strong class="text-slate-900">Mayor</strong> or Shire President</p>
+
+              <ul class="space-y-1.5 text-slate-700">
+                <li class="flex items-center gap-2"><i data-lucide="trash-2" class="w-3.5 h-3.5 text-amber-600"></i> Rubbish & recycling collection</li>
+                <li class="flex items-center gap-2"><i data-lucide="footprints" class="w-3.5 h-3.5 text-amber-600"></i> Local roads, footpaths, signs & drains</li>
+                <li class="flex items-center gap-2"><i data-lucide="book-open" class="w-3.5 h-3.5 text-amber-600"></i> Local libraries, parks & community halls</li>
+                <li class="flex items-center gap-2"><i data-lucide="home" class="w-3.5 h-3.5 text-amber-600"></i> Building permits & zoning</li>
+                <li class="flex items-center gap-2"><i data-lucide="volume-x" class="w-3.5 h-3.5 text-amber-600"></i> Noise control & domestic pet animal control</li>
+                <li class="flex items-center gap-2"><i data-lucide="utensils" class="w-3.5 h-3.5 text-amber-600"></i> Food hygiene & restaurant inspections</li>
+              </ul>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 text-[10px] text-amber-700 font-mono font-medium">
+              Memory hook: Street curbs, neighborhood bins & permits
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <section>
+        <div class="flex items-center gap-2 mb-4">
+          <span class="w-2.5 h-6 rounded-full bg-rose-500"></span>
+          <h2 class="text-xl font-bold tracking-tight text-slate-900">5. Mandatory Australian Values Questions (Must get 5/5)</h2>
+        </div>
+
+        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <div class="space-y-3">
+              <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                <h4 class="font-bold text-amber-800 flex items-center gap-1.5 mb-1">
+                  <i data-lucide="scale" class="w-4 h-4 text-amber-600"></i>
+                  Rule of Law vs Religious Practices
+                </h4>
+                <p class="text-slate-700">
+                  Australia is a secular nation. Where religious practices conflict with Australian law, <span class="memo-answer font-bold text-slate-900">Australian law always prevails</span>. Religious laws have no formal legal status.
+                </p>
+              </div>
+
+              <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                <h4 class="font-bold text-emerald-800 flex items-center gap-1.5 mb-1">
+                  <i data-lucide="users" class="w-4 h-4 text-emerald-600"></i>
+                  Equality & The "Fair Go"
+                </h4>
+                <p class="text-slate-700">
+                  Men and women have strictly equal rights. Jobs are awarded based on <span class="memo-answer font-bold text-slate-900">skills, talent and effort</span>, not family status, wealth or background. There are no formal class distinctions.
+                </p>
+              </div>
+            </div>
+
+            <div class="space-y-3">
+              <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                <h4 class="font-bold text-purple-800 flex items-center gap-1.5 mb-1">
+                  <i data-lucide="heart-handshake" class="w-4 h-4 text-purple-600"></i>
+                  Marriage & Freedom of Choice
+                </h4>
+                <p class="text-slate-700">
+                  Both men and women have the right to marry whom they choose (including same-sex couples) or divorce. <span class="memo-answer font-bold text-rose-700">Forced marriage and polygamy (multiple spouses) are illegal</span> and punishable by prison.
+                </p>
+              </div>
+
+              <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                <h4 class="font-bold text-cyan-800 flex items-center gap-1.5 mb-1">
+                  <i data-lucide="message-square" class="w-4 h-4 text-cyan-600"></i>
+                  Freedom of Speech & Protest
+                </h4>
+                <p class="text-slate-700">
+                  Citizens can criticize the government and protest peacefully, but all actions must remain <span class="memo-answer font-bold text-slate-900">within Australian law</span>. Promoting violence or hate is prohibited.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- FLASHCARDS VIEW (HIDDEN INITIALLY) -->
+    <div id="view-flashcards" class="hidden space-y-6">
+      <div class="flex items-center justify-between">
+        <h2 class="text-lg font-bold text-slate-900">Active Recall Flashcards (Flip to test yourself)</h2>
+        <div class="text-xs text-slate-500 font-medium">
+          Card <span id="cardIndexText">1</span> of <span id="totalCardsText">8</span>
+        </div>
+      </div>
+
+      <div class="max-w-xl mx-auto">
+        <div id="flashcardElement" onclick="flipCard()" class="min-h-[260px] bg-white border-2 border-slate-200 hover:border-amber-400 rounded-3xl p-8 flex flex-col justify-between items-center text-center cursor-pointer transition-all transform duration-300 shadow-md">
+          <span id="cardCategory" class="text-xs uppercase tracking-widest text-amber-700 font-bold bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">Category</span>
+          <div id="cardContent" class="text-xl font-bold text-slate-900 my-auto px-4">
+            Question text goes here
+          </div>
+          <span class="text-xs text-slate-400 flex items-center gap-1.5 font-medium">
+            <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i> Tap card to flip (Show Answer)
+          </span>
+        </div>
+
+        <div class="flex items-center justify-center gap-4 mt-6">
+          <button onclick="prevCard()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 text-xs font-semibold flex items-center gap-2 transition">
+            <i data-lucide="chevron-left" class="w-4 h-4"></i> Previous
+          </button>
+          <button onclick="nextCard()" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold flex items-center gap-2 shadow-sm transition">
+            Next <i data-lucide="chevron-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK 10 QUIZ VIEW (HIDDEN INITIALLY) -->
+    <div id="view-quiz" class="hidden space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-200 pb-4">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">10 High-Yield Mock Questions</h2>
+          <p class="text-xs text-slate-500">Includes the non-obvious government and values scenarios</p>
+        </div>
+        <button onclick="resetQuiz()" class="text-xs text-amber-700 hover:text-amber-800 font-semibold underline">Reset Quiz</button>
+      </div>
+
+      <div id="quizContainer" class="space-y-4 max-w-2xl mx-auto">
+        <!-- Dynamically populated by JS -->
+      </div>
+
+      <div id="quizResultBox" class="hidden p-6 rounded-2xl bg-white border border-slate-200 text-center max-w-md mx-auto space-y-3 shadow-md">
+        <h3 id="quizScoreHeader" class="text-xl font-extrabold text-slate-900">Your Score</h3>
+        <p id="quizScoreText" class="text-sm text-slate-600"></p>
+        <button onclick="resetQuiz()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition">Retake Quiz</button>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // Lucide icons initialization
+    lucide.createIcons();
+
+    // 1. Memory Mask Mode
+    let maskMode = false;
+    function toggleMaskMode() {
+      maskMode = !maskMode;
+      const body = document.body;
+      const btn = document.getElementById('maskToggleBtn');
+      const text = document.getElementById('maskBtnText');
+
+      if (maskMode) {
+        body.classList.add('memory-masked');
+        btn.classList.remove('bg-amber-50', 'text-amber-800', 'border-amber-300');
+        btn.classList.add('bg-emerald-100', 'text-emerald-800', 'border-emerald-400');
+        text.innerText = 'Memory Mask: ACTIVE';
+      } else {
+        body.classList.remove('memory-masked');
+        btn.classList.add('bg-amber-50', 'text-amber-800', 'border-amber-300');
+        btn.classList.remove('bg-emerald-100', 'text-emerald-800', 'border-emerald-400');
+        text.innerText = 'Memory Mask: OFF';
+      }
+    }
+
+    // Tap to reveal single masked item
+    document.addEventListener('click', function(e) {
+      if (e.target && e.target.classList.contains('memo-answer')) {
+        e.target.classList.toggle('revealed');
+      }
+    });
+
+    // 2. Tab Navigation
+    function switchTab(tabId) {
+      ['infographic', 'flashcards', 'quiz'].forEach(id => {
+        document.getElementById(`view-${id}`).classList.add('hidden');
+        const btn = document.getElementById(`tabBtn-${id}`);
+        btn.classList.remove('bg-emerald-600', 'text-white', 'shadow-sm');
+        btn.classList.add('text-slate-600');
+      });
+
+      document.getElementById(`view-${tabId}`).classList.remove('hidden');
+      const activeBtn = document.getElementById(`tabBtn-${tabId}`);
+      activeBtn.classList.add('bg-emerald-600', 'text-white', 'shadow-sm');
+      activeBtn.classList.remove('text-slate-600');
+      
+      if (tabId === 'flashcards') {
+        renderCard();
+      } else if (tabId === 'quiz') {
+        renderQuiz();
+      }
+    }
+
+    // 3. Flashcards Data & Logic
+    const flashcards = [
+      {
+        cat: 'Protocol',
+        q: 'Who is allowed to perform a "Welcome to Country"?',
+        a: 'ONLY Aboriginal or Torres Strait Islander Traditional Custodians of the local area.'
+      },
+      {
+        cat: 'Symbols',
+        q: 'What do the 7 points on the Commonwealth Star stand for?',
+        a: '6 points for the 6 States, and 1 point for the Territories.'
+      },
+      {
+        cat: 'Constitution',
+        q: 'What is a "Double Majority" in a Referendum?',
+        a: '1) A majority of national voters (>50% overall), AND\n2) A majority of voters in at least 4 of the 6 States.'
+      },
+      {
+        cat: 'Government',
+        q: 'Who is Australia\'s Head of State and who represents them?',
+        a: 'King Charles III (The King of Australia), represented by the Governor-General.'
+      },
+      {
+        cat: 'Parliament',
+        q: 'How many senators are elected per State vs Territory?',
+        a: '12 senators per State (total 72), and 2 per mainland Territory (ACT & NT = 4), making 76 total.'
+      },
+      {
+        cat: 'Tiers of Gov',
+        q: 'Which level handles rubbish collection and town libraries?',
+        a: 'Local Government (Councils / Shires).'
+      },
+      {
+        cat: 'Australian Values',
+        q: 'If a religious practice conflicts with Australian law, which one prevails?',
+        a: 'Australian law ALWAYS prevails. Religious laws have no formal legal status.'
+      },
+      {
+        cat: 'Parliament Rules',
+        q: 'Can an Australian citizen who is a dual citizen sit in federal parliament?',
+        a: 'No. Dual citizens are strictly prohibited from seeking election to federal parliament.'
+      }
+    ];
+
+    let currentCardIndex = 0;
+    let isFlipped = false;
+
+    function renderCard() {
+      const card = flashcards[currentCardIndex];
+      document.getElementById('cardCategory').innerText = card.cat;
+      document.getElementById('cardContent').innerText = isFlipped ? card.a : card.q;
+      document.getElementById('cardContent').className = isFlipped 
+        ? "text-lg font-semibold text-emerald-700 my-auto whitespace-pre-line px-4" 
+        : "text-xl font-bold text-slate-900 my-auto px-4";
+      document.getElementById('cardIndexText').innerText = currentCardIndex + 1;
+      document.getElementById('totalCardsText').innerText = flashcards.length;
+    }
+
+    function flipCard() {
+      isFlipped = !isFlipped;
+      renderCard();
+    }
+
+    function nextCard() {
+      isFlipped = false;
+      currentCardIndex = (currentCardIndex + 1) % flashcards.length;
+      renderCard();
+    }
+
+    function prevCard() {
+      isFlipped = false;
+      currentCardIndex = (currentCardIndex - 1 + flashcards.length) % flashcards.length;
+      renderCard();
+    }
+
+    // 4. Quick 10 Quiz
+    const quizData = [
+      {
+        q: "1. Who has the authority to deliver a 'Welcome to Country'?",
+        opts: [
+          "Any meeting chairperson or MC",
+          "An Aboriginal or Torres Strait Islander Traditional Custodian",
+          "The Prime Minister or Governor-General"
+        ],
+        ans: 1
+      },
+      {
+        q: "2. What is Australia's national gemstone?",
+        opts: ["Diamond", "Ruby", "Opal"],
+        ans: 2
+      },
+      {
+        q: "3. What is required for a referendum to change the Australian Constitution?",
+        opts: [
+          "A simple majority of 51% of all Australian voters",
+          "A double majority (majority of voters nationwide + majority in at least 4 of 6 states)",
+          "Approval by the Prime Minister and the Queen/King"
+        ],
+        ans: 1
+      },
+      {
+        q: "4. What does the yellow circle in the Aboriginal flag represent?",
+        opts: ["The sun, giver of life", "The gold found in 1851", "The sandy deserts"],
+        ans: 0
+      },
+      {
+        q: "5. What role does the Governor-General play when a Bill passes both Houses?",
+        opts: [
+          "Vetoes the Bill automatically",
+          "Signs the Bill into law, known as Royal Assent",
+          "Sends the Bill to the British Prime Minister"
+        ],
+        ans: 1
+      },
+      {
+        q: "6. Which level of government is primarily responsible for schools and hospitals?",
+        opts: ["Federal Government", "State and Territory Governments", "Local Council"],
+        ans: 1
+      },
+      {
+        q: "7. How many senators are elected to represent each of the six States?",
+        opts: ["6", "10", "12"],
+        ans: 2
+      },
+      {
+        q: "8. What happened on 1 January 1901?",
+        opts: [
+          "The First Fleet landed in Sydney Cove",
+          "The six separate British colonies united into the Commonwealth of Australia (Federation)",
+          "Anzac troops landed at Gallipoli"
+        ],
+        ans: 1
+      },
+      {
+        q: "9. [VALUES] What happens if an Australian law conflicts with a personal religious practice?",
+        opts: [
+          "Religious laws override civil laws",
+          "Australian law always prevails and must be followed",
+          "The individual can choose depending on their state"
+        ],
+        ans: 1
+      },
+      {
+        q: "10. [VALUES] Under Australian law, can either a husband or wife apply for a divorce if the other objects?",
+        opts: [
+          "Yes, either spouse may apply for divorce even if the other wishes to continue the marriage",
+          "No, both husband and wife must agree in writing",
+          "Only the husband has legal standing to file for divorce"
+        ],
+        ans: 0
+      }
+    ];
+
+    let userAnswers = {};
+
+    function renderQuiz() {
+      const container = document.getElementById('quizContainer');
+      container.innerHTML = '';
+
+      quizData.forEach((item, qIdx) => {
+        const qCard = document.createElement('div');
+        qCard.className = 'bg-white border border-slate-200 rounded-xl p-4 space-y-3 shadow-2xs';
+        
+        const qTitle = document.createElement('h4');
+        qTitle.className = 'text-xs font-bold text-slate-900';
+        qTitle.innerText = item.q;
+        qCard.appendChild(qTitle);
+
+        const optsDiv = document.createElement('div');
+        optsDiv.className = 'space-y-1.5';
+
+        item.opts.forEach((opt, oIdx) => {
+          const btn = document.createElement('button');
+          btn.className = `w-full text-left text-xs p-2.5 rounded-lg border transition ${
+            userAnswers[qIdx] === oIdx 
+              ? (oIdx === item.ans ? 'bg-emerald-50 border-emerald-500 text-emerald-800 font-bold' : 'bg-rose-50 border-rose-500 text-rose-800 font-bold')
+              : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
+          }`;
+          btn.innerText = opt;
+          btn.onclick = () => selectOption(qIdx, oIdx);
+          optsDiv.appendChild(btn);
+        });
+
+        qCard.appendChild(optsDiv);
+        container.appendChild(qCard);
+      });
+
+      checkQuizCompletion();
+    }
+
+    function selectOption(qIdx, oIdx) {
+      userAnswers[qIdx] = oIdx;
+      renderQuiz();
+    }
+
+    function checkQuizCompletion() {
+      const answeredCount = Object.keys(userAnswers).length;
+      if (answeredCount === quizData.length) {
+        let correct = 0;
+        quizData.forEach((item, idx) => {
+          if (userAnswers[idx] === item.ans) correct++;
+        });
+
+        const resBox = document.getElementById('quizResultBox');
+        resBox.classList.remove('hidden');
+        document.getElementById('quizScoreText').innerText = `You scored ${correct} out of ${quizData.length} (${correct * 10}%). Passing mark is 75% plus all values correct.`;
+      }
+    }
+
+    function resetQuiz() {
+      userAnswers = {};
+      document.getElementById('quizResultBox').classList.add('hidden');
+      renderQuiz();
+    }
+  </script>
+</body>
+</html>
